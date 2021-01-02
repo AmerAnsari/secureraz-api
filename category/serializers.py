@@ -24,7 +24,7 @@ class AccountSerializers(serializers.ModelSerializer):
             'id',
             'site',
             'username',
-            'password_hash',
+            'password',
             'category',
         )
 
