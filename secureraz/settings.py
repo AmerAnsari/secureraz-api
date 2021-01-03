@@ -145,6 +145,9 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+# CORS_ORIGIN_WHITELIST = []
+CORS_ORIGIN_ALLOW_ALL = True
+
 
 if env.bool('ONLINE'):
     MIDDLEWARE.append('whitenoise.middleware.WhiteNoiseMiddleware')
