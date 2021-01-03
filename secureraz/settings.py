@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'django_cleanup.apps.CleanupConfig',
     'rest_framework',
     'django_filters',
+    'corsheaders',
     'user_account',
     'category',
     'khazen',
@@ -66,6 +67,7 @@ REST_FRAMEWORK = {
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -147,3 +149,6 @@ STATIC_URL = '/static/'
 if env.bool('ONLINE'):
     MIDDLEWARE.append('whitenoise.middleware.WhiteNoiseMiddleware')
     DATABASES['default'] = dj_database_url.config(conn_max_age=600)
+    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+

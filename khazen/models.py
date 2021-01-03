@@ -22,9 +22,15 @@ class File(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     def save(self, *args, **kwargs):
-        self.file.name = f'{self.uuid}' + '_' + f'{self.name}' + '_' + self.file.name
+        self.file.name = f'{self.name}' + '_' + self.file.name
         if self.file.name.lower().endswith(('.png', '.jpg', '.jpeg', '.gif')):
             self.file_type = FileType.IMAGE
-        elif self.file.name.lower().endswith(('.pdf',)):
+        elif self.file.name.lower().endswith(
+                ('.txt', '.pdf', '.ppt', '.pptx', '.doc', '.docx', '.html', '.htm', '.odt', '.ods', '.xls', '.xlsx')):
             self.file_type = FileType.DOCUMENT
+        elif self.file.name.lower().endswith(('.mp4', '.mov', '.wmv', '.flv', '.avi', '.avchd', '.webm', '.mkv')):
+            self.file_type = FileType.VIDEO
+        elif self.file.name.lower().endswith(
+                ('.mp3', '.pcm', '.wav', '.aiff', '.aac', '.ogg', '.wma', '.flac', '.alac')):
+            self.file_type = FileType.AUDIO
         super().save(*args, **kwargs)
