@@ -26,9 +26,8 @@ ENCRYPTION_SECRET_KEY = env('ENCRYPTION_SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool('DEBUG', False)
 
-ALLOWED_HOSTS = [
-    'secureraz.local'
-]
+ALLOWED_HOSTS = [env('ALLOWED_HOST', 'localhost')]
+
 
 # AWS storage keys.
 AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID')
