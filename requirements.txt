@@ -5,6 +5,7 @@ certifi==2020.11.8
 cffi==1.14.4
 chardet==3.0.4
 coreapi==2.3.3
+django-cors-headers==3.6.0
 coreschema==0.0.4
 cryptography==3.3.1
 Django==3.1.3
