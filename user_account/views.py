@@ -18,3 +18,10 @@ class UserAccountViewSet(UpdateModelMixin, GenericViewSet):
     serializer_class = UserAccountSerializer
     permission_classes = (IsAuthAndOwnerOrReadOnly,)
     lookup_field = 'user__username'
+
+
+def jwt_response_payload_handler(token, user=None, request=None) -> dict:
+    return {
+        'token': token,
+        'user': UserSerializer(user, context={'request': request}).data,
+    }

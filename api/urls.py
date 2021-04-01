@@ -1,8 +1,10 @@
+from django.conf.urls.static import static
 from rest_framework import routers
 from django.urls import path, include
 from rest_framework.documentation import include_docs_urls
 from rest_framework_jwt.views import obtain_jwt_token
 
+from django.conf import settings
 from khazen.views import FileViewSet
 from user_account.views import UserViewSet, UserAccountViewSet
 from category.views import CategoryViewSet, AccountViewSet
@@ -21,3 +23,5 @@ urlpatterns += (
     path('auth/', obtain_jwt_token),
     path('auth/', include('rest_framework.urls')),
 )
+
+urlpatterns += static('/media/', document_root=settings.MEDIA_ROOT)

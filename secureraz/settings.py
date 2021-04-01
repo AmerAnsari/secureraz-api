@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+
 import dj_database_url
 import environ
 
@@ -15,7 +16,6 @@ env = environ.Env(
 if Path('.env').is_file():
     env.read_env(os.path.join(BASE_DIR, '.env'))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
@@ -28,18 +28,18 @@ DEBUG = env.bool('DEBUG', False)
 
 ALLOWED_HOSTS = [env('ALLOWED_HOST')]
 
-
 # AWS storage keys.
 AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY')
 
-DEFAULT_FILE_STORAGE = env('DEFAULT_FILE_STORAGE')
+DEFAULT_FILE_STORAGE = env.str('DEFAULT_FILE_STORAGE', 'django.core.files.storage.FileSystemStorage')
 AWS_STORAGE_BUCKET_NAME = env('AWS_STORAGE_BUCKET_NAME')
 AWS_S3_REGION_NAME = env('AWS_S3_REGION_NAME')
 
-AWS_QUERYSTRING_AUTH = False
+MEDIA_ROOT = os.path.join(BASE_DIR, './media')
+MEDIA_URL = '/media/'
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'files')
+AWS_QUERYSTRING_AUTH = False
 
 # Application definition
 
@@ -60,7 +60,14 @@ INSTALLED_APPS = [
 ]
 
 REST_FRAMEWORK = {
-    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
+    'DEFAULT_FILTER_BACKENDS': (
+        'django_filters.rest_framework.DjangoFilterBackend',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+    ),
 }
 
 MIDDLEWARE = [
@@ -94,7 +101,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'secureraz.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
@@ -104,7 +110,6 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -124,6 +129,12 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# Django JWT
+
+JWT_AUTH = {
+    'JWT_RESPONSE_PAYLOAD_HANDLER': 'user_account.views.jwt_response_payload_handler',
+    'JWT_VERIFY_EXPIRATION': False,
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
@@ -138,7 +149,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
@@ -147,10 +157,8 @@ STATIC_URL = '/static/'
 # CORS_ORIGIN_WHITELIST = []
 CORS_ORIGIN_ALLOW_ALL = True
 
-
 if env.bool('ONLINE'):
     MIDDLEWARE.append('whitenoise.middleware.WhiteNoiseMiddleware')
     DATABASES['default'] = dj_database_url.config(conn_max_age=600)
     STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-

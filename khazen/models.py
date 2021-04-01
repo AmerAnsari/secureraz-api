@@ -2,7 +2,6 @@ from django.contrib.auth.models import User
 from django.db import models
 import uuid
 
-
 class FileType(models.IntegerChoices):
     IMAGE = 1
     DOCUMENT = 2
@@ -14,12 +13,20 @@ class FileType(models.IntegerChoices):
 
 class File(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=User)
-    uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False,)
+    uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, )
     name = models.CharField(max_length=50)
     description = models.TextField(max_length=100, blank=True, null=True)
     file = models.FileField()
     file_type = models.IntegerField(choices=FileType.choices, default=FileType.OTHER)
     created = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'File'
+        verbose_name_plural = 'Files'
+        ordering = ('-uuid',)
+
+    def __str__(self) -> models.CharField:
+        return self.name
 
     def save(self, *args, **kwargs):
         self.file.name = f'{self.name}' + '_' + self.file.name
