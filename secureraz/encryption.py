@@ -1,25 +1,9 @@
-import base64
 from cryptography.fernet import Fernet
-from cryptography.hazmat.backends import default_backend
-from cryptography.hazmat.primitives import hashes
-from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
-from django.db.models.fields import CharField
 from django.conf import settings
+from django.db.models.fields import CharField
 
-
-"""
-Setup the secret keys.
-"""
-kdf = PBKDF2HMAC(
-    algorithm=hashes.SHA256(),
-    length=32,
-    salt=settings.SECRET_KEY.encode(),
-    iterations=100000,
-    backend=default_backend()
-)
-key = base64.urlsafe_b64encode(kdf.derive(settings.ENCRYPTION_SECRET_KEY.encode()))
-f = Fernet(key)
-
+# Get a Fernet instance with secret key.
+f = Fernet(settings.ENCRYPTION_SECRET_KEY.encode())
 
 def encrypt(data):
     """
@@ -27,8 +11,7 @@ def encrypt(data):
     :param data: Field to encrypt.
     :return: Encrypted field.
     """
-    encrypted = f.encrypt(data.encode())
-    return encrypted
+    return f.encrypt(data.encode())
 
 
 def decrypt(data):
@@ -37,8 +20,7 @@ def decrypt(data):
     :param data: Field to decrypt.
     :return: Actual field(decrypted filed).
     """
-    decrypted = f.decrypt(data).decode('utf-8')
-    return decrypted
+    return f.decrypt(data).decode('utf-8')
 
 
 class Encryption(CharField):
