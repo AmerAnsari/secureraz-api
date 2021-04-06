@@ -21,7 +21,9 @@ def decrypt(data):
     :param data: Field to decrypt.
     :return: Actual field(decrypted filed).
     """
-    return f.decrypt(bytes(data, 'utf-8')).decode('utf-8')
+    if isinstance(data, str):
+        data = bytes(data, 'utf-8')
+    return f.decrypt(data).decode('utf-8')
 
 
 class Encryption(CharField):
