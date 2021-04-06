@@ -18,7 +18,8 @@ class Account(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     site = models.CharField(max_length=50, unique=True)
     username = models.CharField(max_length=50)
-    password = Encryption(max_length=500)
+    # password = Encryption(max_length=500)
+    password = models.CharField(max_length=500)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
     def __str__(self):
