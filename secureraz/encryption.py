@@ -5,6 +5,7 @@ from django.db.models.fields import CharField
 # Get a Fernet instance with secret key.
 f = Fernet(settings.ENCRYPTION_SECRET_KEY.encode())
 
+
 def encrypt(data):
     """
     Encrypt the field.
@@ -20,7 +21,7 @@ def decrypt(data):
     :param data: Field to decrypt.
     :return: Actual field(decrypted filed).
     """
-    return f.decrypt(data).decode('utf-8')
+    return f.decrypt(bytes(data, 'utf-8')).decode('utf-8')
 
 
 class Encryption(CharField):
