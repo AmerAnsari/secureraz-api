@@ -5,17 +5,19 @@ from user_account.models import UserAccount
 
 
 class UserAccountSerializer(serializers.ModelSerializer):
-    name = serializers.ReadOnlyField()
+    storage_limit = serializers.ReadOnlyField()
+    storage_current = serializers.ReadOnlyField()
+    storage_limit_human = serializers.ReadOnlyField()
+    storage_current_human = serializers.ReadOnlyField()
 
     class Meta:
         model = UserAccount
         fields = (
-            'display_name',
-            'name',
+            'storage_limit',
+            'storage_current',
+            'storage_limit_human',
+            'storage_current_human',
         )
-        extra_kwargs = {
-            'display_name': {'write_only': True},
-        }
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -28,10 +30,10 @@ class UserSerializer(serializers.ModelSerializer):
             'id',
             'username',
             'email',
+            'password',
             'date_joined',
             'last_login',
             'user_account',
-            'password',
         )
         extra_kwargs = {
             'date_joined': {'read_only': True},

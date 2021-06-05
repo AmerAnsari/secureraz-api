@@ -26,6 +26,7 @@ class AccountViewSet(ModelViewSet):
     filter_backends = [DjangoFilterBackend, SearchFilter]
     search_fields = (
         'site',
+        'username',
     )
     filterset_fields = ['category']
 

@@ -8,12 +8,5 @@ class FileSerializers(serializers.ModelSerializer):
 
     class Meta:
         model = File
-        fields = (
-            'uuid',
-            'user',
-            'name',
-            'description',
-            'file',
-            'file_type',
-        )
-        read_only_fields = ('file_type',)
+        fields = ('uuid', 'file', 'filename', 'ext', 'size', 'size_human', 'file_type', 'user')
+        read_only_fields = ('uuid', 'filename', 'ext', 'size', 'size_human', 'file_type', 'user')
