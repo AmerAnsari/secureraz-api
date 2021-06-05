@@ -36,8 +36,8 @@ DEFAULT_FILE_STORAGE = env.str('DEFAULT_FILE_STORAGE', 'django.core.files.storag
 AWS_STORAGE_BUCKET_NAME = env('AWS_STORAGE_BUCKET_NAME')
 AWS_S3_REGION_NAME = env('AWS_S3_REGION_NAME')
 
-MEDIA_ROOT = os.path.join(BASE_DIR, './media')
-MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, './khazen_local')
+MEDIA_URL = '/khazen_local/'
 
 AWS_QUERYSTRING_AUTH = False
 
@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'user_account',
     'category',
+    'media',
     'khazen',
 ]
 
@@ -110,6 +111,8 @@ DATABASES = {
         'NAME': str(os.path.join(BASE_DIR, "db.sqlite3")),
     }
 }
+
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators

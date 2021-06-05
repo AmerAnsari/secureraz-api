@@ -5,6 +5,8 @@ from category.models import Category, Account
 
 class CategorySerializers(serializers.ModelSerializer):
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    accounts_count = serializers.ReadOnlyField()
+    medias_count = serializers.ReadOnlyField()
 
     class Meta:
         model = Category
@@ -12,6 +14,8 @@ class CategorySerializers(serializers.ModelSerializer):
             'id',
             'user',
             'name',
+            'accounts_count',
+            'medias_count',
         )
 
 
@@ -48,3 +52,6 @@ class AccountWriteSerializers(serializers.ModelSerializer):
             'password',
             'category',
         )
+
+    def to_representation(self, instance):
+        return AccountSerializers(instance).data

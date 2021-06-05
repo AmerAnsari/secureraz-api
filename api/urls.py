@@ -1,13 +1,13 @@
+from django.conf import settings
 from django.conf.urls.static import static
-from rest_framework import routers
 from django.urls import path, include
+from rest_framework import routers
 from rest_framework.documentation import include_docs_urls
 from rest_framework_jwt.views import obtain_jwt_token
 
-from django.conf import settings
-from khazen.views import FileViewSet
-from user_account.views import UserViewSet, UserAccountViewSet
 from category.views import CategoryViewSet, AccountViewSet
+from media.views import MediaViewSet
+from user_account.views import UserViewSet, UserAccountViewSet
 
 router = routers.DefaultRouter()
 
@@ -15,7 +15,7 @@ router.register('user', UserViewSet, basename='User')
 router.register('user_account', UserAccountViewSet, basename='UserAccount')
 router.register('category', CategoryViewSet, basename='Category')
 router.register('account', AccountViewSet, basename='Account')
-router.register('file', FileViewSet, basename='File')
+router.register('media', MediaViewSet, basename='Media')
 
 urlpatterns = router.urls
 urlpatterns += (
@@ -24,4 +24,4 @@ urlpatterns += (
     path('auth/', include('rest_framework.urls')),
 )
 
-urlpatterns += static('/media/', document_root=settings.MEDIA_ROOT)
+urlpatterns += static('/khazen_local/', document_root=settings.MEDIA_ROOT)

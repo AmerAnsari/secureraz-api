@@ -35,3 +35,18 @@ class IsAuthAndOwner(BasePermission):
 
     def has_object_permission(self, request, view, obj):
         return request.user == obj.user
+
+
+# Return an IdName of the given enum.
+# key: ID of the object.
+# enum: Enum that we'll extract the name of the given key.
+class IdName:
+    def __init__(self, key, enum):
+        self.id = key
+        self.name = enum(key).name
+
+    def get_id_name(self) -> object:
+        obj = {}
+        obj['id'] = self.id
+        obj['name'] = self.name
+        return obj
