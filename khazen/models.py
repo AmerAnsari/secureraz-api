@@ -3,7 +3,7 @@ import uuid
 import humanize
 from django.contrib.auth.models import User
 from django.db import models
-from magic.magic import Magic
+# from magic.magic import Magic
 
 from khazen.utils import gen_filename
 from secureraz.utils import IdName
@@ -48,8 +48,8 @@ class File(models.Model):
         """Before save, get the original file Ext/mime-type using libmagic."""
         self.filename = self.file.name
         self.size = self.file.size
-        f = Magic(mime=True)
-        self.ext = f.from_buffer(self.file.file.read(2048))
+        # f = Magic(mime=True)
+        # self.ext = f.from_buffer(self.file.file.read(2048))
 
         # Image
         if self.file.name.lower().endswith(('.png', '.jpg', '.jpeg', '.gif')):

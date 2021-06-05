@@ -9,7 +9,6 @@ django-filter==2.4.0
 django-rest-auth==0.9.5
 django-storages==1.11.1
 dj_database_url==0.5.0
-python-magic-bin==0.4.14
 djangorestframework==3.12.4
 djangorestframework-jwt==1.11.0
 humanize==3.7.0
