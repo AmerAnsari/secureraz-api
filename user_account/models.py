@@ -4,13 +4,20 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
+from user_account.config import USER_DEFAULT_STORAGE
+
 
 class UserAccount(models.Model):
     user = models.OneToOneField(User, related_name='user_account', on_delete=models.CASCADE)
+    storage = models.IntegerField(
+        verbose_name="storage",
+        help_text="Admin set the storage limit (MB)",
+        null=True,
+        blank=True,
+    )
     storage_limit = models.IntegerField(
         verbose_name="storage_limit",
         help_text="size of user storage",
-        default=209715200
     )
     storage_current = models.IntegerField(
         verbose_name="storage_current",
@@ -26,8 +33,15 @@ class UserAccount(models.Model):
     def storage_current_human(self):
         return humanize.naturalsize(self.storage_current)
 
-    def __str__(self):
-        return self.name
+    def __str__(self) -> str:
+        return self.user.username
+
+    def save(self, *args, **kwargs):
+        if self.storage:
+            self.storage_limit = self.storage * 1024 * 1024
+        else:
+            self.storage_limit = USER_DEFAULT_STORAGE * 1024 * 1024
+        super().save(*args, **kwargs)
 
 
 @receiver(post_save, sender=User)

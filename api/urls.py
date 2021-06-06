@@ -6,6 +6,7 @@ from rest_framework.documentation import include_docs_urls
 from rest_framework_jwt.views import obtain_jwt_token
 
 from category.views import CategoryViewSet, AccountViewSet
+from khazen.views import FileViewSet
 from media.views import MediaViewSet
 from user_account.views import UserViewSet, UserAccountViewSet
 
@@ -16,6 +17,7 @@ router.register('user_account', UserAccountViewSet, basename='UserAccount')
 router.register('category', CategoryViewSet, basename='Category')
 router.register('account', AccountViewSet, basename='Account')
 router.register('media', MediaViewSet, basename='Media')
+router.register('file', FileViewSet, basename='File')
 
 urlpatterns = router.urls
 urlpatterns += (

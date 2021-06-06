@@ -4,7 +4,7 @@ import humanize
 from django.contrib.auth.models import User
 from django.db import models
 # from magic.magic import Magic
-
+from khazen import config
 from khazen.utils import gen_filename
 from secureraz.utils import IdName
 
@@ -51,6 +51,21 @@ class File(models.Model):
         # f = Magic(mime=True)
         # self.ext = f.from_buffer(self.file.file.read(2048))
 
+        """Check the file size"""
+        if (self.size / 1024) / 1024 > config.MAX_FILE_SIZE_ALLOWED:
+            raise ValueError("File is larger than allowed ({:.1f} MB).".format(config.MAX_FILE_SIZE_ALLOWED))
+
+        """Check the user storage"""
+        user_storage_limit = self.user.user_account.storage_limit
+        user_storage_current = self.user.user_account.storage_current + self.size
+
+        if user_storage_current > user_storage_limit:
+            raise ValueError("Your storage is full.")
+        else:
+            self.user.user_account.storage_current = user_storage_current
+            self.user.user_account.save()
+
+        """Set the file type"""
         # Image
         if self.file.name.lower().endswith(('.png', '.jpg', '.jpeg', '.gif')):
             self.type = FileType.IMAGE
@@ -78,3 +93,11 @@ class File(models.Model):
         else:
             self.type = FileType.OTHER
         super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        """Update the user storage"""
+        self.user.user_account.storage_current -= self.size
+        self.user.user_account.save()
+        super().delete(*args, **kwargs)
+
+

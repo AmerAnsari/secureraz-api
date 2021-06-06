@@ -10,3 +10,9 @@ class FileSerializers(serializers.ModelSerializer):
         model = File
         fields = ('uuid', 'file', 'filename', 'ext', 'size', 'size_human', 'file_type', 'user')
         read_only_fields = ('uuid', 'filename', 'ext', 'size', 'size_human', 'file_type', 'user')
+
+    def save(self, **kwargs):
+        try:
+            super().save(**kwargs)
+        except ValueError as e:
+            raise serializers.ValidationError({'details': e})
